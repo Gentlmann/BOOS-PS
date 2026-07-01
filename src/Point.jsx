@@ -322,6 +322,47 @@ function point() {
     setView("order");
   }
 
+  function handlePrintReceipt() {
+    window.print();
+  }
+
+  function handleDownloadReceipt() {
+    if (!receipt) return;
+
+    const lines = [];
+    lines.push("ABC Cafeteria");
+    lines.push(`Receipt: ${receipt.id}`);
+    lines.push(
+      `${receipt.date.toLocaleDateString()} ${receipt.date.toLocaleTimeString()} - Table ${receipt.tableNumber}`
+    );
+    lines.push("--------------------------------");
+    receipt.items.forEach((item) => {
+      lines.push(`${item.name} x${item.qty}  ${currency(item.qty * item.price)}`);
+    });
+    lines.push("--------------------------------");
+    lines.push(`Subtotal: ${currency(receipt.subtotal)}`);
+    lines.push(`Tax: ${currency(receipt.tax)}`);
+    lines.push(`Discount: -${currency(receipt.discount)}`);
+    lines.push(`Total: ${currency(receipt.grandTotal)}`);
+    lines.push(
+      `Paid via: ${receipt.method === "cash" ? "Cash by Hand" : MERCHANTS[receipt.method].label}`
+    );
+    if (receipt.method === "cash") {
+      lines.push(`Amount Received: ${currency(receipt.amountReceived)}`);
+      lines.push(`Change: ${currency(receipt.change)}`);
+    }
+
+    const blob = new Blob([lines.join("\n")], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${receipt.id}.txt`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }
+
   // ---------- SUCCESS VIEW ----------
   if (view === "success" && receipt) {
     return (
@@ -385,6 +426,15 @@ function point() {
                   </div>
                 </>
               )}
+            </div>
+
+            <div className="receipt-actions">
+              <button type="button" className="btn btn-secondary" onClick={handlePrintReceipt}>
+                🖨️ Print Receipt
+              </button>
+              <button type="button" className="btn btn-secondary" onClick={handleDownloadReceipt}>
+                ⬇️ Download
+              </button>
             </div>
 
             <button className="btn btn-primary btn-block" onClick={handleNewOrder}>

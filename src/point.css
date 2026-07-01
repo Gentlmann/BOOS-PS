@@ -1039,3 +1039,36 @@
   border-radius: 999px;
   padding: 2px 8px;
 }
+
+/* ── Receipt action buttons (print / download) ── */
+.receipt-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.receipt-actions .btn {
+  flex: 1;
+  padding: 11px;
+  font-size: 13px;
+}
+
+/* ── Print-friendly receipt ── */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .receipt,
+  .receipt * {
+    visibility: visible;
+  }
+  .receipt {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    margin: 0;
+    box-shadow: none;
+    background: #fff;
+  }
+}
