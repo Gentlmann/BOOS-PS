@@ -24,15 +24,15 @@ const DISCOUNT = 0; // flat discount in dollars
 const MERCHANTS = {
   edahab: {
     label: "E-Dahab Merchant",
-    name: "ABC Cafeteria",
+    name: "Gentleman's Cafe",
     number: "25261XXXXXXX",
     instructions: "Customer sends payment to the merchant account.",
   },
-  sahal: {
-    label: "Sahal Merchant",
-    name: "ABC Cafeteria",
+  zaad: {
+    label: "Zaad Merchant",
+    name: "Gentleman's Cafe",
     number: "25263XXXXXXX",
-    instructions: "Customer sends payment using Sahal Merchant.",
+    instructions: "Customer sends payment using Zaad Merchant.",
   },
 };
 
@@ -77,7 +77,7 @@ function point() {
   // Payment state
   const [method, setMethod] = useState("cash");
   const [amountReceived, setAmountReceived] = useState("");
-  const [merchantConfirmed, setMerchantConfirmed] = useState({ edahab: false, sahal: false });
+  const [merchantConfirmed, setMerchantConfirmed] = useState({ edahab: false, zaad: false });
   const [error, setError] = useState("");
   const [receipt, setReceipt] = useState(null);
 
@@ -107,7 +107,7 @@ function point() {
     if (order.length === 0) return false;
     if (method === "cash") return received >= grandTotal && grandTotal > 0;
     if (method === "edahab") return merchantConfirmed.edahab && received >= grandTotal;
-    if (method === "sahal") return merchantConfirmed.sahal && received >= grandTotal;
+    if (method === "zaad") return merchantConfirmed.zaad && received >= grandTotal;
     return false;
   }, [order, method, received, grandTotal, merchantConfirmed]);
 
@@ -286,7 +286,7 @@ function point() {
   function handleCancelPayment() {
     setAmountReceived("");
     setMethod("cash");
-    setMerchantConfirmed({ edahab: false, sahal: false });
+    setMerchantConfirmed({ edahab: false, zaad: false });
     setError("");
     setView("order");
   }
@@ -312,7 +312,7 @@ function point() {
     setReceipt(newReceipt);
     updateActiveTableOrder(() => []);
     setAmountReceived("");
-    setMerchantConfirmed({ edahab: false, sahal: false });
+    setMerchantConfirmed({ edahab: false, zaad: false });
     setError("");
     setView("success");
   }
@@ -331,7 +331,7 @@ function point() {
     if (!receipt) return;
 
     const lines = [];
-    lines.push("ABC Cafeteria");
+    lines.push("Gentleman's Cafe");
     lines.push(`Receipt: ${receipt.id}`);
     lines.push(
       `${receipt.date.toLocaleDateString()} ${receipt.date.toLocaleTimeString()} - Table ${receipt.tableNumber}`
@@ -376,7 +376,7 @@ function point() {
 
             <div className="receipt">
               <div className="receipt-header">
-                <span>ABC Cafeteria</span>
+                <span>Gentleman's Cafe</span>
                 <span className="receipt-id">{receipt.id}</span>
               </div>
               <div className="receipt-meta">
@@ -555,35 +555,35 @@ function point() {
                 </div>
               </label>
 
-              {/* Sahal */}
-              <label className={`method-option ${method === "sahal" ? "method-selected" : ""}`}>
+              {/* Zaad */}
+              <label className={`method-option ${method === "zaad" ? "method-selected" : ""}`}>
                 <input
                   type="radio"
                   name="method"
-                  checked={method === "sahal"}
-                  onChange={() => handleSelectMethod("sahal")}
+                  checked={method === "zaad"}
+                  onChange={() => handleSelectMethod("zaad")}
                 />
                 <div className="method-body">
-                  <div className="method-name">Sahal Merchant</div>
-                  {method === "sahal" && (
+                  <div className="method-name">Zaad Merchant</div>
+                  {method === "zaad" && (
                     <div className="method-detail">
                       <div className="merchant-info">
                         <div>
                           <span className="merchant-label">Merchant Name</span>
-                          <span className="merchant-value">{MERCHANTS.sahal.name}</span>
+                          <span className="merchant-value">{MERCHANTS.zaad.name}</span>
                         </div>
                         <div>
                           <span className="merchant-label">Merchant Number</span>
-                          <span className="merchant-value">{MERCHANTS.sahal.number}</span>
+                          <span className="merchant-value">{MERCHANTS.zaad.number}</span>
                         </div>
                       </div>
-                      <p className="instructions">{MERCHANTS.sahal.instructions}</p>
+                      <p className="instructions">{MERCHANTS.zaad.instructions}</p>
 
-                      <label className="field-label" htmlFor="amountReceivedSahal">
+                      <label className="field-label" htmlFor="amountReceivedZaad">
                         Amount Customer Sent
                       </label>
                       <input
-                        id="amountReceivedSahal"
+                        id="amountReceivedZaad"
                         type="number"
                         min="0"
                         step="0.01"
@@ -603,11 +603,11 @@ function point() {
 
                       <button
                         type="button"
-                        className={`btn btn-confirm ${merchantConfirmed.sahal ? "btn-confirmed" : ""}`}
-                        onClick={() => handleConfirmMerchant("sahal")}
+                        className={`btn btn-confirm ${merchantConfirmed.zaad ? "btn-confirmed" : ""}`}
+                        onClick={() => handleConfirmMerchant("zaad")}
                         disabled={received < grandTotal}
                       >
-                        {merchantConfirmed.sahal ? "Payment Confirmed ✓" : "Confirm Payment"}
+                        {merchantConfirmed.zaad ? "Payment Confirmed ✓" : "Confirm Payment"}
                       </button>
                     </div>
                   )}
