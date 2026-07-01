@@ -1072,3 +1072,25 @@
     background: #fff;
   }
 }
+
+/* ── Merchant amount verification ── */
+.btn-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--blue-100);
+  color: var(--blue-700);
+}
+
+.btn-confirm:disabled:hover {
+  background: var(--blue-100);
+  color: var(--blue-700);
+}
+
+/* ── Receipt thank-you message ── */
+.receipt-thanks {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-600);
+  margin: 4px 0 0;
+}

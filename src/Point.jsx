@@ -106,8 +106,8 @@ function point() {
   const canComplete = useMemo(() => {
     if (order.length === 0) return false;
     if (method === "cash") return received >= grandTotal && grandTotal > 0;
-    if (method === "edahab") return merchantConfirmed.edahab;
-    if (method === "sahal") return merchantConfirmed.sahal;
+    if (method === "edahab") return merchantConfirmed.edahab && received >= grandTotal;
+    if (method === "sahal") return merchantConfirmed.sahal && received >= grandTotal;
     return false;
   }, [order, method, received, grandTotal, merchantConfirmed]);
 
@@ -275,6 +275,7 @@ function point() {
   // --- Payment screen handlers ---
   function handleSelectMethod(m) {
     setMethod(m);
+    setAmountReceived("");
     setError("");
   }
 
@@ -305,7 +306,7 @@ function point() {
       discount,
       grandTotal,
       method,
-      amountReceived: method === "cash" ? received : grandTotal,
+      amountReceived: received,
       change: method === "cash" ? change : 0,
     };
     setReceipt(newReceipt);
@@ -347,8 +348,8 @@ function point() {
     lines.push(
       `Paid via: ${receipt.method === "cash" ? "Cash by Hand" : MERCHANTS[receipt.method].label}`
     );
+    lines.push(`Amount Received: ${currency(receipt.amountReceived)}`);
     if (receipt.method === "cash") {
-      lines.push(`Amount Received: ${currency(receipt.amountReceived)}`);
       lines.push(`Change: ${currency(receipt.change)}`);
     }
 
@@ -414,18 +415,19 @@ function point() {
                   {receipt.method === "cash" ? "Cash by Hand" : MERCHANTS[receipt.method].label}
                 </span>
               </div>
+              <div className="receipt-row">
+                <span>Amount Received</span>
+                <span>{currency(receipt.amountReceived)}</span>
+              </div>
               {receipt.method === "cash" && (
-                <>
-                  <div className="receipt-row">
-                    <span>Amount Received</span>
-                    <span>{currency(receipt.amountReceived)}</span>
-                  </div>
-                  <div className="receipt-row">
-                    <span>Change</span>
-                    <span>{currency(receipt.change)}</span>
-                  </div>
-                </>
+                <div className="receipt-row">
+                  <span>Change</span>
+                  <span>{currency(receipt.change)}</span>
+                </div>
               )}
+
+              <div className="receipt-divider" />
+              <p className="receipt-thanks">Waad mahadsantahay, macmiil! 🙏</p>
             </div>
 
             <div className="receipt-actions">
@@ -517,10 +519,34 @@ function point() {
                         </div>
                       </div>
                       <p className="instructions">{MERCHANTS.edahab.instructions}</p>
+
+                      <label className="field-label" htmlFor="amountReceivedEdahab">
+                        Amount Customer Sent
+                      </label>
+                      <input
+                        id="amountReceivedEdahab"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        className="text-input"
+                        value={amountReceived}
+                        onChange={(e) => setAmountReceived(e.target.value)}
+                      />
+                      {received > 0 && received < grandTotal && (
+                        <p className="field-warning">
+                          Amount entered ({currency(received)}) is less than the total due ({currency(grandTotal)}).
+                        </p>
+                      )}
+                      {received >= grandTotal && grandTotal > 0 && (
+                        <p className="field-success">Amount matches the total — verified ✓</p>
+                      )}
+
                       <button
                         type="button"
                         className={`btn btn-confirm ${merchantConfirmed.edahab ? "btn-confirmed" : ""}`}
                         onClick={() => handleConfirmMerchant("edahab")}
+                        disabled={received < grandTotal}
                       >
                         {merchantConfirmed.edahab ? "Payment Confirmed ✓" : "Confirm Payment"}
                       </button>
@@ -552,10 +578,34 @@ function point() {
                         </div>
                       </div>
                       <p className="instructions">{MERCHANTS.sahal.instructions}</p>
+
+                      <label className="field-label" htmlFor="amountReceivedSahal">
+                        Amount Customer Sent
+                      </label>
+                      <input
+                        id="amountReceivedSahal"
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        className="text-input"
+                        value={amountReceived}
+                        onChange={(e) => setAmountReceived(e.target.value)}
+                      />
+                      {received > 0 && received < grandTotal && (
+                        <p className="field-warning">
+                          Amount entered ({currency(received)}) is less than the total due ({currency(grandTotal)}).
+                        </p>
+                      )}
+                      {received >= grandTotal && grandTotal > 0 && (
+                        <p className="field-success">Amount matches the total — verified ✓</p>
+                      )}
+
                       <button
                         type="button"
                         className={`btn btn-confirm ${merchantConfirmed.sahal ? "btn-confirmed" : ""}`}
                         onClick={() => handleConfirmMerchant("sahal")}
+                        disabled={received < grandTotal}
                       >
                         {merchantConfirmed.sahal ? "Payment Confirmed ✓" : "Confirm Payment"}
                       </button>
