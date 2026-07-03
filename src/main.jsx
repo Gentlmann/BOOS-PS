@@ -1,11 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
-import Point from "./Point.jsx";
+import AppLayout from './components/AppLayout'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <Point />
+    <AppLayout />
   </StrictMode>,
 )

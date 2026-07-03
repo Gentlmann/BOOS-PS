@@ -1,0 +1,179 @@
+/* ══════════════════════════════════════
+   AppLayout.css
+   ══════════════════════════════════════ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+/* ── Wrapper ── */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ── Sidebar ── */
+.app-sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: #1a1a2e;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width 0.25s ease;
+}
+
+.app-layout--collapsed .app-sidebar {
+  width: 64px;
+}
+
+/* ── Sidebar top ── */
+.app-sidebar__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 14px 14px;
+  border-bottom: 1px solid #2a2a45;
+  flex-shrink: 0;
+}
+
+.app-sidebar__brand {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-sidebar__toggle {
+  background: #25253f;
+  border: none;
+  color: #8a8aab;
+  font-size: 11px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.app-sidebar__toggle:hover {
+  background: #2f54eb;
+  color: #ffffff;
+}
+
+/* ── Nav ── */
+.app-sidebar__nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.app-sidebar__nav::-webkit-scrollbar {
+  width: 4px;
+}
+
+.app-sidebar__nav::-webkit-scrollbar-thumb {
+  background: #2a2a45;
+  border-radius: 2px;
+}
+
+/* ── Nav button ── */
+.app-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 10px;
+  cursor: pointer;
+  color: #b0b0cc;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: background 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.app-nav-btn:hover {
+  background: #25253f;
+  color: #ffffff;
+}
+
+.app-nav-btn--active {
+  background: #2f54eb;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.app-nav-btn--active:hover {
+  background: #1d3fc7;
+}
+
+.app-nav-btn__icon {
+  font-size: 18px;
+  flex-shrink: 0;
+  width: 24px;
+  text-align: center;
+}
+
+.app-nav-btn__label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Display area ── */
+.app-display {
+  flex: 1;
+  height: 100vh;
+  overflow-y: auto;
+  background-color: #f4f6fb;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .app-layout {
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+
+  .app-sidebar {
+    width: 100% !important;
+    height: auto;
+  }
+
+  .app-sidebar__nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    padding: 8px;
+  }
+
+  .app-nav-btn {
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    padding: 8px 10px;
+    min-width: 60px;
+  }
+
+  .app-display {
+    height: auto;
+  }
+}
